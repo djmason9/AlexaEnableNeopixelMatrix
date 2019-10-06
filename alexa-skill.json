@@ -1,0 +1,85 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "light frame",
+            "intents": [
+                {
+                    "name": "AMAZON.FallbackIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": [
+                        "help"
+                    ]
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": [
+                        "to stop"
+                    ]
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "NeoIntent",
+                    "slots": [
+                        {
+                            "name": "animation",
+                            "type": "animations"
+                        }
+                    ],
+                    "samples": [
+                        "for a {animation} show",
+                        "to run the {animation} light show",
+                        "to run the {animation} show",
+                        "to run the {animation} lights"
+                    ]
+                }
+            ],
+            "types": [
+                {
+                    "name": "animations",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "random"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "arcade"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "juggle"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "dots"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "off"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "confetti"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
