@@ -25,7 +25,7 @@ BLYNK_WRITE(VIRTUAL_PIN)
     restCallState = param.asInt();
 }
 
-//This makes our code multi-threaded (well kinda)
+//This makes our code multi-threaded (well kinda Protothread)
 TimedAction timedAction = TimedAction(5, checkforRestCall); //
 
 
@@ -86,7 +86,7 @@ void setup()
 void loop()
 {
     Blynk.run();
-    timedAction.check(); //this is used for "multi-threading" calls checkforRestCall on each iteration.
+    timedAction.check(); //this is used for "multi-threading" (Protothread) calls checkforRestCall on each iteration.
     
     // Handle REST calls
     WiFiClient client = server.available();
