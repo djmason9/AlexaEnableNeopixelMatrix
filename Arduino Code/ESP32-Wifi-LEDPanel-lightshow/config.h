@@ -10,7 +10,7 @@ const bool    kMatrixSerpentineLayout = false;
 #define LED_DT 5 // Data pin to connect to the strip.
 #define READY_PIN 2 // Data pin to connect to the ready LED.
 #define VIRTUAL_PIN V0 //Blynk's Virtual pin that is set when API is called from https://blynkapi.docs.apiary.io/#reference/0/write-pin-value-via-get/write-pin-value-via-get?console=1
-#define COLOR_ORDER RGB  // Are they RGB, GRB or what??
+#define COLOR_ORDER GRB  // Are they RGB, GRB or what??
 #define LED_TYPE WS2812B // Don't forget to change LEDS.addLeds
 #define NUM_LEDS (kMatrixWidth * kMatrixHeight)     // Number of LED's.
 #define MAX_DIMENSION ((kMatrixWidth>kMatrixHeight) ? kMatrixWidth : kMatrixHeight)
