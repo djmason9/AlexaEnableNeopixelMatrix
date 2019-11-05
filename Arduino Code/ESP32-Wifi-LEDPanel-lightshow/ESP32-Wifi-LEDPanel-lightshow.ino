@@ -12,9 +12,49 @@ WiFiServer server(80);
 /*****************************************************
 **** Add this before the TimedAction call or fail.**** 
 /*****************************************************/
+int counter=0; // 900000 //15 mins
+
+void randomShow(){
+  Serial.println("called every 60 seconds.");
+  
+  if(pirState == LOW){ //checkForMotion == true && 
+      Serial.println("its low.");
+      
+  }
+
+  counter += counter + 60000;  //add a minute
+  //check if its over the aloted time
+  if(counter >= 120000){
+    restCallState += 1;
+    if(restCallState >= 6)
+      restCallState = 1; //confetti
+    
+    ledControl((String)restCallState);
+    
+    counter=0;
+  }
+  
+}
 void checkforRestCall()
 {
-    ledControl((String)restCallState);
+  motionVal = digitalRead(MOTION_DT);
+  if (motionVal == HIGH) {            // check if the input is HIGH
+    if (pirState == LOW) {
+      // we have just turned on
+      Serial.println("Motion detected!");
+      // We only want to print on the output change, not state
+      pirState = HIGH;
+    }
+  } else {
+    if (pirState == HIGH){
+      // we have just turned of
+      Serial.println("Motion ended!");
+      // We only want to print on the output change, not state
+      pirState = LOW;
+    }
+  }
+  ledControl((String)restCallState);
+    
 }
 //https://examples.blynk.cc for details
 BLYNK_WRITE(VIRTUAL_PIN)
@@ -26,7 +66,9 @@ BLYNK_WRITE(VIRTUAL_PIN)
 }
 
 //This makes our code multi-threaded (well kinda Protothread)
-TimedAction timedAction = TimedAction(5, checkforRestCall); //
+TimedAction restAction = TimedAction(5, checkforRestCall); 
+TimedAction randomAction = TimedAction(60000,randomShow); //every minute
+
 
 
 /**
@@ -78,6 +120,8 @@ void setup()
     targetPalette = RainbowColors_p;
     currentBlending = LINEARBLEND;
 
+    pinMode(MOTION_DT, INPUT);
+    ledControl((String)1);
 } // setup()
 
 /**
@@ -86,7 +130,10 @@ void setup()
 void loop()
 {
     Blynk.run();
-    timedAction.check(); //this is used for "multi-threading" (Protothread) calls checkforRestCall on each iteration.
+    if(randomAnimations == true)
+      randomAction.check(); 
+      
+    restAction.check(); //this is used for "multi-threading" (Protothread) calls checkforRestCall on each iteration.
     
     // Handle REST calls
     WiFiClient client = server.available();
@@ -400,7 +447,7 @@ int ledControl(String command)
     restCallState = state;
     //    Serial.print("ledControl command: ");
     //    Serial.println(state);
-    if (state == 1) {
+    if (state == 1) { //confetti
         ChangeMe(); // Check the demo loop for changes to the variables.
 
         EVERY_N_MILLISECONDS(thisdelay)
@@ -526,7 +573,7 @@ int ledControl(String command)
         }
         restCallState = 1; //go back to confetti or this will crash at some point
         return 4;
-    } else if (state == 5) {
+    } else if (state == 5) { // crazy or loud
         // Periodically choose a new palette, speed, and scale
         ChangePaletteAndSettingsPeriodically();
 
@@ -538,7 +585,15 @@ int ledControl(String command)
         mapNoiseToLEDsUsingPalette();
         FastLED.show();
         return 5;
-    } else {
+    } else if(state == 6){ //random
+        randomAnimations = true;
+        dot_beat();
+        FastLED.show();
+        return 6;
+    } else if(state == 7){ //checkForMotion
+        checkForMotion = true;
+        return 7;
+    }else { // off
         fadeToBlackBy(leds, NUM_LEDS, thisfade);
         FastLED.show();
         return 9;

@@ -36,6 +36,7 @@ const valuesMap = {
     "juggle" : 3,
     "jungle" : 3,
     "dots" : 2,
+    "dot" : 2,
     "off" : 0,
     "loud" : 5,
     "crazy" : 5,
@@ -44,7 +45,7 @@ const valuesMap = {
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
-}  
+}
 
 const NeoIntentHandler = {
     canHandle(handlerInput) {
@@ -53,10 +54,11 @@ const NeoIntentHandler = {
     },
     async handle(handlerInput) {  
             let lightName = handlerInput.requestEnvelope.request.intent.slots.animation.value;
-            let lightVal = (valuesMap[lightName] === 6) ? (getRandomInt(3)+1) : valuesMap[lightName];
+            // let lightVal = (valuesMap[lightName] === 6) ? (getRandomInt(3)+1) : valuesMap[lightName];
+            let lightVal = valuesMap[lightName];
             
             await makeRequest(`/update/v0?value=${lightVal}`);
-                const speakOutput = `Let's get this ${lightName} light show started.`;
+                const speakOutput = `Let's get the ${lightName} light  started.`;
                 return handlerInput.responseBuilder
                     .speak(speakOutput)
                     .getResponse();
@@ -69,7 +71,7 @@ const LaunchRequestHandler = {
         return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
     },
     handle(handlerInput) {
-        const speakOutput = 'Welcome, ask me how to work your light frame.';
+        const speakOutput = 'Welcome, ask me how to work your box lights.';
         return handlerInput.responseBuilder
             .speak(speakOutput)
             .getResponse();
@@ -89,7 +91,7 @@ const HelpIntentHandler = {
         for(let key in valuesMap){
             names += key +",";
         }
-        const speakOutput = `Welcome, ask me to run a light show with names like, ${names}`;
+        const speakOutput = `Welcome, ask me to run a light show with names like, juggle, dots, confetti, and crazy.`;
 
         return handlerInput.responseBuilder
             .speak(speakOutput)
@@ -106,7 +108,7 @@ const CancelAndStopIntentHandler = {
     async handle(handlerInput) {  
     
             await makeRequest(`/update/v0?value=0`);
-                const speakOutput = `Bummer. Stopping the light frame show.`;
+                const speakOutput = `Bummer. Stopping box lights.`;
                 return handlerInput.responseBuilder
                     .speak(speakOutput)
                     .getResponse();
