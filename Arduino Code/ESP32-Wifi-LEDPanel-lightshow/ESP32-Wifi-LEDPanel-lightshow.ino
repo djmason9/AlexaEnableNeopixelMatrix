@@ -594,6 +594,7 @@ int ledControl(String command)
         checkForMotion = true;
         return 7;
     }else { // off
+        randomAnimations = false;
         fadeToBlackBy(leds, NUM_LEDS, thisfade);
         FastLED.show();
         return 9;
